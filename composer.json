@@ -9,7 +9,6 @@
       "email": "1119@zolotoykod.ru"
     }
   ],
-  "type": "project",
   "require": {
     "php": ">=5.6"
   },
