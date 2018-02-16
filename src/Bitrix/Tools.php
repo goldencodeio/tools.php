@@ -36,4 +36,17 @@ class Tools
 		$nav = array_filter($nav);
 		return array_values($nav);
 	}
+
+	/**
+	 * Remove keys started with tilda (~)
+	 * @param array $data
+	 * @return array
+	 */
+	public static function removeTildaKeys(array $data) {
+		$deleteKeys = array_filter(array_keys($data), function($key) {
+			return strpos($key, '~') === 0;
+		});
+		foreach ($deleteKeys as $key) unset($data[$key]);
+		return $data;
+	}
 }
