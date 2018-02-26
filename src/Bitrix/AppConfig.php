@@ -43,9 +43,13 @@ class AppConfig {
 			['IBLOCK_CODE' => $this->options['iblockCode']],
 			false,
 			false,
-			array_map(function($key) {
-				return 'PROPERTY_' . $key;
-			}, $this->options['configProps'])
+			array_merge(
+				['ID'],
+				array_map(
+					function($key) {return 'PROPERTY_' . $key;},
+					$this->options['configProps']
+				)
+			)
 		)->Fetch();
 
 		if (!$this->appConfig) {
