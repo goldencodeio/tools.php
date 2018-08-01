@@ -49,4 +49,24 @@ class Tools
 		foreach ($deleteKeys as $key) unset($data[$key]);
 		return $data;
 	}
+
+	/**
+	 * Cache $callback results using bitrix CPHPCache
+	 * @param string $cacheId cache id
+	 * @param callable $callback function to cache results
+	 * @param any $args $callback function argument
+	 * @param number $timeSeconds cache TTL
+	 */
+	public static function cacheResult($cacheId, callable $callback, $args = null, $timeSeconds = 36000000) {
+		$obCache = new \CPHPCache();
+		$cachePath = '/'.SITE_ID.'/'.$cacheId;
+		if ($obCache->InitCache($timeSeconds, $cacheId, $cachePath)) {
+			$vars = $obCache->GetVars();
+			$result = $vars['result'];
+		} elseif($obCache->StartDataCache()) {
+			$result = $callback($arCallbackParams);
+			$obCache->EndDataCache(['result' => $result]);
+		}
+		return $result;
+	}
 }
