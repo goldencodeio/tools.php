@@ -64,7 +64,7 @@ class Tools
 			$vars = $obCache->GetVars();
 			$result = $vars['result'];
 		} elseif($obCache->StartDataCache()) {
-			$result = $callback($arCallbackParams);
+			$result = $callback($args);
 			$obCache->EndDataCache(['result' => $result]);
 		}
 		return $result;
