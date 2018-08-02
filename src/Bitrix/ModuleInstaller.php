@@ -12,6 +12,7 @@ use RecursiveIteratorIterator;
 class ModuleInstaller extends CModule {
 	protected $DEV_LINKS = [];
 	protected $INSTALL_PATHS = [];
+	protected $INSTALLER_DIR = __DIR__;
 
 	public function doInstall() {
 		ModuleManager::registerModule($this->MODULE_ID);
@@ -93,10 +94,10 @@ class ModuleInstaller extends CModule {
 	}
 
 	private function getRecursiveFiles($path) {
-		$dirFromDocRoot = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT']));
+		$dirFromDocRoot = substr($this->INSTALLER_DIR, strlen($_SERVER['DOCUMENT_ROOT']));
 
 		$iter = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator(__DIR__ . '/' . $path, RecursiveDirectoryIterator::SKIP_DOTS),
+			new RecursiveDirectoryIterator($this->INSTALLER_DIR . '/' . $path, RecursiveDirectoryIterator::SKIP_DOTS),
 			RecursiveIteratorIterator::SELF_FIRST,
 			RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
 		);
@@ -116,10 +117,10 @@ class ModuleInstaller extends CModule {
 	}
 
 	private function getRecursiveDirs($path) {
-		$dirFromDocRoot = substr(__DIR__, strlen($_SERVER['DOCUMENT_ROOT']));
+		$dirFromDocRoot = substr($this->INSTALLER_DIR, strlen($_SERVER['DOCUMENT_ROOT']));
 
 		$iter = new RecursiveIteratorIterator(
-			new RecursiveDirectoryIterator(__DIR__ . '/' . $path, RecursiveDirectoryIterator::SKIP_DOTS),
+			new RecursiveDirectoryIterator($this->INSTALLER_DIR . '/' . $path, RecursiveDirectoryIterator::SKIP_DOTS),
 			RecursiveIteratorIterator::SELF_FIRST,
 			RecursiveIteratorIterator::CATCH_GET_CHILD // Ignore "Permission denied"
 		);
@@ -127,7 +128,7 @@ class ModuleInstaller extends CModule {
 		$result = [];
 
 		if (!in_array($path, ['bitrix', 'local', 'upload'])) {
-			$result[] = str_replace($dirFromDocRoot, '', __DIR__ . '/' . $path);
+			$result[] = str_replace($dirFromDocRoot, '', $this->INSTALLER_DIR . '/' . $path);
 		}
 
 		foreach ($iter as $path => $item) {
