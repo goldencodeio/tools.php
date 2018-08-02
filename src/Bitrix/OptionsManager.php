@@ -8,12 +8,6 @@ use CAdminMessage;
 use CAdminTabControl;
 use Bitrix\Main\Application;
 
-global $USER, $APPLICATION;
-
-if (!$USER->isAdmin()) {
-	$APPLICATION->authForm('Nope');
-}
-
 class OptionsManager {
 	private $options = [];
 	private $tabs = [];
@@ -36,7 +30,12 @@ class OptionsManager {
 	}
 
 	public function handleRequest(callable $callback = null) {
-		global $save, $restore;
+		global $USER, $APPLICATION, $save, $restore;
+
+		if (!$USER->isAdmin()) {
+			$APPLICATION->authForm('Nope');
+		}
+
 		$request = $this->getRequest();
 		if ((!empty($save) || !empty($restore)) && $request->isPost() && check_bitrix_sessid()) {
 			if (!empty($restore)) {
@@ -80,7 +79,12 @@ class OptionsManager {
 	}
 
 	public function writeForm() {
-		global $mid;
+		global $USER, $APPLICATION, $mid;
+
+		if (!$USER->isAdmin()) {
+			$APPLICATION->authForm('Nope');
+		}
+
 		$this->tabControl->begin();
 		?>
 		<form method="post" action="<?=sprintf('%s?mid=%s&lang=%s', $this->getRequest()->getRequestedPage(), urlencode($mid), LANGUAGE_ID)?>">
