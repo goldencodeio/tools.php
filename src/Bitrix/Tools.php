@@ -80,4 +80,15 @@ class Tools
 		}
 		return true;
 	}
+
+	/**
+	 * Allow clearing of Iblock cached data
+	 * @return bool
+	 */
+	public static function enableIblockCacheClear() {
+		while (!\CIblock::isEnabledClearTagCache()) {
+			\CIblock::enableClearTagCache();
+		}
+		return true;
+	}
 }
