@@ -69,4 +69,15 @@ class Tools
 		}
 		return $result;
 	}
+
+	/**
+	 * Prevent clearing of Iblock cached data
+	 * @return bool
+	 */
+	public static function disableIblockCacheClear() {
+		while (\CIblock::isEnabledClearTagCache()) {
+			\CIblock::disableClearTagCache();
+		}
+		return true;
+	}
 }
