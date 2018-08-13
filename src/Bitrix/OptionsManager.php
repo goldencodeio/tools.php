@@ -18,7 +18,6 @@ class OptionsManager {
 		$this->context = Application::getInstance()->getContext();
 		$this->options = $options;
 		$this->tabs = $tabs;
-		$this->tabControl = new CAdminTabControl('tabControl', $this->tabs);
 	}
 
 	private function getRequest() {
@@ -84,6 +83,8 @@ class OptionsManager {
 		if (!$USER->isAdmin()) {
 			$APPLICATION->authForm('Nope');
 		}
+
+		$this->tabControl = new CAdminTabControl('tabControl', $this->tabs);
 
 		$this->tabControl->begin();
 		?>
