@@ -2,14 +2,13 @@
 
 namespace goldencode\Helpers\Bitrix;
 
-use CModule;
 use Bitrix\Main\IO\FileDeleteException;
 use Bitrix\Main\IO\FileOpenException;
 use Bitrix\Main\ModuleManager;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class ModuleInstaller extends CModule {
+trait ModuleInstaller {
 	protected $DEV_LINKS = [];
 	protected $INSTALL_PATHS = [];
 	protected $INSTALLER_DIR = __DIR__;
