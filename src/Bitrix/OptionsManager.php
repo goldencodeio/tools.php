@@ -96,6 +96,17 @@ class OptionsManager {
 				$filteredOpts = array_filter($this->options, function ($opt) use ($tab) { return $opt['tab'] === $tab['DIV']; });
 				foreach ($filteredOpts as $opt_name=>$opt) { ?>
 					<tr>
+						<? if ($opt['type'] === 'html') { ?>
+						<td colspan="2">
+							<?
+							if ($opt['html']) {
+								echo $opt['html'];
+							} else if (file_exists($opt['path'])) {
+								include $opt['path'];
+							}
+							?>
+						</td>
+						<? } else { ?>
 						<td width="40%" style="vertical-align: top; line-height: 25px;">
 							<label for="<?=$opt_name?>"><?=$opt['label'] . ($opt['required'] ? ' *' : '')?>:</label>
 						<td width="60%">
@@ -135,6 +146,19 @@ class OptionsManager {
 									<?php
 									break;
 
+								case 'textarea':
+									?>
+									<textarea
+										cols="<?=$opt['cols'] ?: '80'?>"
+										rows="<?=$opt['rows'] ?: '20'?>"
+										name="<?=$opt_name?>"
+										id="<?=$opt_name?>"
+										<?= $opt['required'] ? 'required="required"' : ''?>
+										<?= $opt['placeholder'] ? 'placeholder="' . $opt['placeholder'] . '"' : ''?>
+									><?=htmlspecialchars(Option::get(ADMIN_MODULE_NAME, $opt_name) ?: $opt['default']);?></textarea>
+									<?
+									break;
+
 								case 'text':
 								default:
 									?>
@@ -144,6 +168,7 @@ class OptionsManager {
 										id="<?=$opt_name?>"
 										value="<?=htmlspecialchars(Option::get(ADMIN_MODULE_NAME, $opt_name));?>"
 										<?= $opt['required'] ? 'required="required"' : ''?>
+										<?= $opt['placeholder'] ? 'placeholder="' . $opt['placeholder'] . '"' : ''?>
 									/>
 									<?php
 									break;
@@ -151,6 +176,7 @@ class OptionsManager {
 							?>
 							<? if ($opt['description']) echo '<p>' . $opt['description'] . '</p>';?>
 						</td>
+						<? } ?>
 					</tr>
 				<? }
 			}
