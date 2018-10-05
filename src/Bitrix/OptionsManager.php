@@ -2,6 +2,7 @@
 
 namespace goldencode\Helpers\Bitrix;
 
+use Bitrix\Main\Event;
 use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\Config\Option;
 use CAdminMessage;
@@ -59,9 +60,16 @@ class OptionsManager {
 								break;
 						}
 
+						$event = new Event(ADMIN_MODULE_NAME, 'OnBeforeSetOption_' . $id, ['value' => &$value]);
+						$event->send();
+
+						$event = new Event(ADMIN_MODULE_NAME, 'OnBeforeSetOption', ['value' => &$value, 'name' => $id]);
+						$event->send();
+
 						Option::set(ADMIN_MODULE_NAME, $id, $value);
 					}
 
+					// TODO: deprecate callback. use event instead
 					if (!is_null($callback)) {
 						$callback($request);
 					}
